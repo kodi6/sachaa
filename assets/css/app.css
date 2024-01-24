@@ -1,0 +1,33 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* This file is for your main application CSS */
+@font-face {
+    font-family: 'Papyrus';
+    src: url('/fonts/papyrus.ttf');
+    }
+
+@font-face {
+    font-family: 'Ayuthaya';
+    src: url('/fonts/Ayuthaya.ttf');
+    }
+
+#hero {
+background: linear-gradient(31deg, white , white, transparent 60%) , url(/images/bg.jpg) no-repeat center;
+/* background: linear-gradient(145deg, white , white, transparent 70%) , url(/images/IMG_6172f.jpg) no-repeat center; */
+/* background:  url(/images/IMG_6172f.jpg) no-repeat center; */
+
+background-size: cover;
+}
+
+
+#community {
+    /* background: linear-gradient(306deg, transparent 20%, white , white) , url(/images/FL2.jpg) repeat right; */
+    /* background: linear-gradient(306deg, transparent 20%, white , white) , url(/images/bg.jpg) no-repeat right; */
+    background: url(/images/bg2.jpg) no-repeat right;
+  
+    /* background:  url(/images/FL2.jpg) no-repeat right; */
+    background-size: cover;
+  
+  }
