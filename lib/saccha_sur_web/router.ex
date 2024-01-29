@@ -19,6 +19,9 @@ defmodule SacchaSurWeb.Router do
 
     # get "/", PageController, :home
       live "/tellmeastory.guru", SacchaSurLive.Index, :index
+      live "/tellmeastory.guru/story", SacchaSurLive.Index, :story
+
+
   end
 
   # Other scopes may use custom stacks.
