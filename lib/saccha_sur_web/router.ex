@@ -18,9 +18,9 @@ defmodule SacchaSurWeb.Router do
     pipe_through :browser
 
     # get "/", PageController, :home
-      live "/tellmeastory.guru", SacchaSurLive.Index, :index
       live "/tellmeastory.guru/story", SacchaSurLive.Index, :story
-
+      live "/tellmeastory.guru/buy", SacchaSurLive.Index, :pay
+      live "/tellmeastory.guru", SacchaSurLive.Index, :index
 
   end
 
