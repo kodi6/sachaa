@@ -14,13 +14,28 @@ defmodule SacchaSurWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :brow do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_live_flash
+    plug :put_root_layout, html: {SacchaSurWeb.Layouts, :root}
+    plug :put_secure_browser_headers
+  end
+
+  scope "/", SacchaSurWeb do
+    pipe_through :brow
+    post "/verify_payment", PageController, :verify_payment
+
+  end
+
   scope "/", SacchaSurWeb do
     pipe_through :browser
 
-    # get "/", PageController, :home
+
       live "/tellmeastory.guru/story", SacchaSurLive.Index, :story
-      live "/tellmeastory.guru/buy", SacchaSurLive.Index, :pay
+      live "/tellmeastory.guru/buy", SacchaSurLive.Index, :checkout
       live "/tellmeastory.guru", SacchaSurLive.Index, :index
+      live "/pay", PayLive.Index, :index
 
   end
 

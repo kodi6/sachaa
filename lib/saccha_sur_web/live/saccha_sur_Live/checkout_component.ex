@@ -1,15 +1,41 @@
-defmodule SacchaSurWeb.SacchaSurLive.FormComponent do
+defmodule SacchaSurWeb.SacchaSurLive.CheckoutComponent do
   use SacchaSurWeb, :live_component
+
+  alias SacchaSur.Checkouts
+  alias SacchaSur.Razorpay
 
   @impl true
   def render(assigns) do
     ~H"""
-     <div class="mt-3 text-left sm:mt-5">
-        <div class="font-semibold text-center text-5xl text-gray-900 pb-5">
-          <span class="font-papyrus">Let there be Light</span>
-        </div>
-        <p class="text-2xl text-center font-papyrus">Moving from Darkness to Dawn</p>
-        <div class="mt-10  font-ayuthaya">
+    <div>
+    <.header>
+        <%= @title %>
+        <:subtitle>Use this form to manage user records in your database.</:subtitle>
+      </.header>
+
+      <.simple_form
+        for={@form}
+        id="pay-form"
+        phx-target={@myself}
+        phx-change="validate"
+        phx-submit="save"
+      >
+        <.input field={@form[:name]} type="text" label="Name" required/>
+        <.input field={@form[:email]} type="text" label="Email" required/>
+        <.input field={@form[:phone]} type="text" label="Phone Number" required/>
+        <.input field={@form[:shipping_address]} type="text" label="Shipping Address" required/>
+        <.input field={@form[:house_number]} type="text" label="House Number" required/>
+        <.input field={@form[:state]} type="text" label="State" required/>
+        <.input field={@form[:city]} type="text" label="City" required/>
+        <.input field={@form[:country]} type="text" label="Country" required/>
+        <.input field={@form[:postal_code]} type="text" label="Postal Code" required/>
+        <.input field={@form[:book_count]} type="text" label="Book Count" required/>
+        <.input field={@form[:shipping_charge]} type="text" label="Shipping Charge" required/>
+        <%!-- <.input field={@form[:order_id]} type="hidden" label="Order Id" required/> --%>
+        <.input field={@form[:total_amount]} type="number" label="Total Amount" value="600"/>
+
+
+
         <p>How does one find a guru? I could think
             of only one way to get a definitive answer
             to this question. I had to ask my friend, the
@@ -49,7 +75,7 @@ defmodule SacchaSurWeb.SacchaSurLive.FormComponent do
             your own teachers but the guru has to find
             you. There is no other way.”</p>
 
-         <%!-- <p>Now I was confused.</p>
+         <p>Now I was confused.</p>
 
           <p>“What is the difference between a teacher
             and a guru?” I asked.</p>
@@ -98,9 +124,78 @@ defmodule SacchaSurWeb.SacchaSurLive.FormComponent do
           <p>“What is the difference between a teacher
             and a guru?” I asked.</p>
 
-          <p>(Story continues in the full book...)</p>  --%>
-        </div>
+          <p>(Story continues in the full book...)</p>
+
+
+        <:actions>
+          <.button  phx-disable-with="Saving...">pay</.button>
+        </:actions>
+      </.simple_form>
+
     </div>
     """
   end
+
+
+
+  @impl true
+   def update(%{checkout: checkout} = assigns, socket) do
+    changeset = Checkouts.change_checkout(checkout)
+
+    {:ok,
+     socket
+     |> assign(assigns)
+     |> assign_form(changeset)}
+  end
+
+
+
+
+  @impl true
+  def handle_event("validate", %{"checkout" => checkout_params}, socket) do
+
+    changeset =
+      socket.assigns.checkout
+      |> Checkouts.change_checkout(checkout_params)
+      |> Map.put(:action, :validate)
+
+    {:noreply,
+    socket
+    |> assign_form(changeset)}
+  end
+
+  def handle_event("save", %{"checkout" => checkout_params}, socket) do
+    save_user(socket, socket.assigns.action, checkout_params)
+  end
+
+  defp save_user(socket, :checkout, checkout_params) do
+    total_amount = Map.get(checkout_params, "total_amount") |> String.to_integer()
+    order_id = Razorpay.call(total_amount)
+    checkout_params = Map.put(checkout_params, "total_amount", total_amount)
+    checkout_params = Map.put(checkout_params, "order_id", order_id)
+
+    case Checkouts.create_checkout(checkout_params) do
+      {:ok, checkout} ->
+
+        # order_id = Map.get(checkout_params, "order_id")
+
+        # notify_parent({:saved, user})
+
+        {:noreply,
+         socket
+         |> redirect(to: ~p"/tellmeastory.guru?order=#{checkout.order_id}")
+        }
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign_form(socket, changeset)}
+    end
+  end
+
+  defp assign_form(socket, %Ecto.Changeset{} = changeset) do
+    assign(socket, :form, to_form(changeset))
+  end
+
+  # defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
+
+
 end

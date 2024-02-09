@@ -18,7 +18,13 @@ defmodule SacchaSur.Checkouts do
     Checkout.changeset(checkout, attrs)
   end
 
-  def get_checkout_by_order(order_id) do
+  def get_checkout_by_order_id(order_id) do
     Repo.get_by(Checkout, order_id: order_id)
+  end
+
+  def update_checkout(%Checkout{} = checkout, attrs) do
+    checkout
+    |> Checkout.changeset(attrs)
+    |> Repo.update()
   end
 end
