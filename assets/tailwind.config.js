@@ -25,6 +25,7 @@ module.exports = {
         },
       colors: {
         brand: "#FD4F00",
+        'custom-orange': '#F97316'
       }
     },
   },
