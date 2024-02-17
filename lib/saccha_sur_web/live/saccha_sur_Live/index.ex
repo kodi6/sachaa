@@ -19,6 +19,8 @@ defmodule SacchaSurWeb.SacchaSurLive.Index do
     socket
     |> assign(:name, name)
     |> assign(:email, email)
+
+
   }
   end
 
@@ -35,6 +37,8 @@ defmodule SacchaSurWeb.SacchaSurLive.Index do
     socket
     |> assign(:page_title, "checkout")
     |> assign(:checkout, %Checkout{})
+    |> assign(:count, 1)
+    |> assign(:book_price, 655)
 
   end
 
@@ -45,6 +49,8 @@ defmodule SacchaSurWeb.SacchaSurLive.Index do
   defp apply_action(socket, :index, _params) do
     socket
   end
+
+
 
 
 

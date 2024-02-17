@@ -20,9 +20,6 @@ defmodule SacchaSur.Checkout do
     field :razorpay_signature, :string
 
 
-
-
-
     timestamps(type: :utc_datetime)
   end
 
@@ -30,6 +27,6 @@ defmodule SacchaSur.Checkout do
   def changeset(checkout, attrs) do
     checkout
     |> cast(attrs, [:name, :phone, :email, :shipping_address, :house_number, :state, :city, :country, :postal_code, :book_count, :shipping_charge, :total_amount, :order_id, :razorpay_payment_id, :razorpay_signature])
-    |> validate_required([:name, :phone, :email, :shipping_address, :house_number, :state, :city, :country, :postal_code, :book_count, :shipping_charge, :total_amount, :order_id])
+    |> validate_required([:name, :phone, :email, :shipping_address, :house_number, :postal_code, :book_count, :shipping_charge, :total_amount, :order_id])
   end
 end

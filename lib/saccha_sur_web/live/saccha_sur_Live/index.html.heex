@@ -421,16 +421,18 @@
 
 
 
-<.modal :if={@live_action in [:checkout]} id="checkout-modal" show on_cancel={JS.patch(~p"/tellmeastory.guru")}>
+<.checkout_modal :if={@live_action in [:checkout]} id="checkout-modal" show on_cancel={JS.patch(~p"/tellmeastory.guru")}>
   <.live_component
     module={SacchaSurWeb.SacchaSurLive.CheckoutComponent}
     id={:checkout}
     action={@live_action}
     checkout={@checkout}
     title={@page_title}
+    count={@count}
+    book_price={@book_price}
     patch={~p"/tellmeastory.guru"}
   />
-</.modal>
+</.checkout_modal>
     
 <.modal :if={@live_action in [:story]} id="story-modal" show on_cancel={JS.patch(~p"/tellmeastory.guru")}>
   <.live_component

@@ -50,6 +50,7 @@ defmodule SacchaSur.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
+      {:nimble_csv, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"}
     ]
   end
