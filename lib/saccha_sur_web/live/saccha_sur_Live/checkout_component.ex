@@ -86,7 +86,6 @@ defmodule SacchaSurWeb.SacchaSurLive.CheckoutComponent do
    def update(%{checkout: checkout} = assigns, socket) do
     changeset = Checkouts.change_checkout(checkout)
     conutries = Checkouts.list_countries()
-    states = Checkouts.list_states()
 
     {:ok,
      socket
