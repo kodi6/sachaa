@@ -39,6 +39,8 @@ defmodule SacchaSurWeb.SacchaSurLive.Index do
     |> assign(:checkout, %Checkout{})
     |> assign(:count, 1)
     |> assign(:book_price, 655)
+    |> assign(:shipping_charge, 0)
+
 
   end
 

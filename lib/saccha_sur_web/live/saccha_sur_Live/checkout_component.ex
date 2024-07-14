@@ -17,7 +17,6 @@ defmodule SacchaSurWeb.SacchaSurLive.CheckoutComponent do
       phx-change="validate"
       phx-submit="save"
     >
-
       <div class="flex space-x-6 mb-20 justify-between">
         <div class="w-1/2 space-y-8">
             <%!-- <input type="text" name="Name" id="Name" class="block w-full h-[45px] rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-custom-orange sm:text-sm sm:leading-6" placeholder="you@example.com"> --%>
@@ -56,7 +55,7 @@ defmodule SacchaSurWeb.SacchaSurLive.CheckoutComponent do
             </div>
         </div>
 
-        <.check_input field={@form[:shipping_charge]} type="text" label="Shipping Charge" required/>
+        <.check_input field={@form[:shipping_charge]} type="text" label="Shipping Charge" value={@shipping_charge} required/>
         <.check_input field={@form[:book_count]} type="hidden"  value={@count} required/>
         </div>
       </div>
@@ -67,17 +66,14 @@ defmodule SacchaSurWeb.SacchaSurLive.CheckoutComponent do
             <div class="border-solid border-2 border-gray-300 "></div>
           </div>
 
-          <div class="flex items-center justify-center bg-custom-orange text-white rounded-md w-1/4">
+          <button  class="flex items-center justify-center bg-custom-orange text-white w-1/4 hover:bg-orange-600">
             <span class="text-xl mr-4">PAY</span>
             <img class="w-4 h-4" src="/images/Rupee-Symbol-White.svg" alt="logo">
             <div class="text-xl font-medium"> <%= @book_price %></div>
-          </div>
+          </button>
         </div>
         <.check_input field={@form[:total_amount]} type="hidden"  value={@book_price} required/>
-
-        <.button phx-disable-with="Saving...">Save User</.button>
     </.simple_form>
-
     </div>
     """
   end
