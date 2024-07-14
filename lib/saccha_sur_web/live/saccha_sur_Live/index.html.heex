@@ -34,7 +34,8 @@
                             <div class="flex flex-wrap -m-2.5 mb-20">
                                 <div class="w-auto p-2.5">
                                     <div class="block text-center">
-                                        <a href="https://pages.razorpay.com/pl_N6TrGb0E9gozlm/view"
+                                    
+                                        <a href={~p"/tellmeastory.guru/buy"}
                                             class="block py-3 px-6 w-full text-white font-semibold border rounded-xl focus:ring transition ease-in-out duration-200 text-base font-medium focus:ring-gray-50 bg-orange-500 border-yellow-600 focus:ring-yellow-400 hover:bg-orange-600"
                                         >
                                             Buy the Book
@@ -43,6 +44,7 @@
                                 </div>
                                 <div class="w-auto p-2.5">
                                     <div class="block">
+                                       <.link patch={~p"/tellmeastory.guru/story"}>
                                         <button
                                             class="py-3 px-9 w-full font-semibold border border-gray-300 hover:border-gray-400 rounded-xl focus:ring focus:ring-gray-50 bg-white hover:bg-gray-100 transition ease-in-out duration-200"
                                             type="button"
@@ -53,6 +55,7 @@
                                                 </div>
                                             </div>
                                         </button>
+                                      </.link>
                                     </div>
                                 </div>
                             </div>
@@ -418,98 +421,105 @@
 
 
 
-   
-    <.button 
-    class="m-6"
-    phx-click={SacchaSurWeb.Layouts.App.toggle_dropdown_menu()}
-    id="openModal"
-    >
-    click
-    </.button>
+<.checkout_modal :if={@live_action in [:checkout]} id="checkout-modal" show on_cancel={JS.patch(~p"/tellmeastory.guru")}>
+  <.live_component
+    module={SacchaSurWeb.SacchaSurLive.CheckoutComponent}
+    id={:checkout}
+    action={@live_action}
+    checkout={@checkout}
+    title={@page_title}
+    count={@count}
+    book_price={@book_price}
+    shipping_charge={@shipping_charge}
+    patch={~p"/tellmeastory.guru"}
+  />
+</.checkout_modal>
+    
+<.modal :if={@live_action in [:story]} id="story-modal" show on_cancel={JS.patch(~p"/tellmeastory.guru")}>
+  <.live_component
+    module={SacchaSurWeb.SacchaSurLive.FormComponent}
+    id={:story}
+    patch={~p"/tellmeastory.guru"}
+  />
+</.modal>
+
+<%!-- <button id="rzp-button1">Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var options = {
+    "key": "rzp_test_270oaMCzf0ozoH", // Enter the Key ID generated from the Dashboard
+    "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "Acme Corp", //your business name
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": "", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
+    "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+        "name": "sKumar", //your customer's name
+        "email": "skumar@example.com",
+        "contact": "9000090000" //Provide the customer's phone number for better conversion rates 
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script> --%>
 
 
-<div id="dropdown_menu"  class="relative z-10" hidden="true">
-  <!--
-    Background backdrop, show/hide based on modal state.
 
-    Entering: "ease-out duration-300"
-      From: "opacity-0"
-      To: "opacity-100"
-    Leaving: "ease-in duration-200"
-      From: "opacity-100"
-      To: "opacity-0"
-  -->
-  <div phx-click-away={SacchaSurWeb.Layouts.App.toggle_dropdown_menu()} class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
-  <div class="fixed inset-0 z-10 w-screen overflow-y-auto" id="modalContainer">
-    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-      <!--
-        Modal panel, show/hide based on modal state.
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var orderId = getParameterByName('order'); // Get the value of the 'order' parameter from the URL
 
-        Entering: "ease-out duration-300"
-          From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-          To: "opacity-100 translate-y-0 sm:scale-100"
-        Leaving: "ease-in duration-200"
-          From: "opacity-100 translate-y-0 sm:scale-100"
-          To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-      -->
-      <div   class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6" id="modalContent">
-       <audio id="modalAudio" src="/audio/1.mp3"></audio>
-          <div  class="">
-                <div >
-                  <div class="mt-3 text-left sm:mt-5">
-                    <div as="h3" class="font-semibold text-center text-5xl text-gray-900 pb-5">
-                    <span class="font-papyrus">Let there be Light</span>
-                    </div>
-                        <p class="text-2xl text-center font-ayuthaya">Moving from Darkness to Dawn</p>
-                            <div class="mt-10 prose prose-xl font-ayuthaya text-xl leading-9 text-gray-600 ">
-                              <p >How does one find a guru? I could think
-                                of only one way to get a definitive answer
-                                to this question. I had to ask my friend, the
-                                wise old musician, Bhaskar!</p>
+// Check if the order ID is present in the URL
+if (orderId) {
+    var options = {
+        "key": "rzp_test_270oaMCzf0ozoH", // Enter the Key ID generated from the Dashboard
+        "amount": "660000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Acme Corp", //your business name
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": orderId,   
+        "callback_url": "http://localhost:4000/verify_payment?order_id=" + orderId,
+        "prefill": { 
+            "name": "<%= @name %>", 
+            "email": "<%= @email%>",
+            "contact": "9976944688"
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
 
-                                <p class="mt-6">Bhaskar was more than twice my age
-                                at that time. Even then, we had an easy
-                                and friendly relationship. Most times I
-                                would not have hesitated to call him my
-                                best friend. We talked about anything
-                                and everything.</p>
-                                
+    window.onload = function(event){
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+        event.preventDefault(); // Prevent default action of the event
+    };
+}
 
-                                <p class="mt-6">A few days later I met Bhaskar and asked him
-                                my question, “How does one find a Guru?”
-                                He looked at me very intently for a long time
-                                and then said, “You cannot!” took one of his
-                                very long pauses and continued, “The Guru
-                                finds you!”</p>
-                                
-                                <p class="mt-6">This was not the answer I was expecting.
-                                “Surely there is something one can do to find
-                                a guru?” feeling a little uncomfortable at the
-                                one-sidedness of the above statement.</p>
-                                <p>It looked like Bhaskar had lost interest in
-                                the question but he was merely lost in his
-                                thoughts. He came back and responded,
-                                “No, not really. The Guru finds you.”</p>
-
-                                <p class="mt-6">“I cannot accept that”, I said forcefully,
-                                “I have always found my own teachers…”</p>
-                                <p>“AHA!” he said, “Teachers! Yes, you can find
-                                your own teachers but the guru has to find
-                                you. There is no other way.”</p>
-                                <p>Now I was confused.</p>
-                                <p>“What is the difference between a teacher
-                                and a guru?” I asked.</p>
-                                <p>(Story continues in the full book...)</p>
-                            </div>
-                      </div>
-                </div>
-                <div class="mt-5 sm:mt-6">
-
-                </div>
-              </div>
-      </div>
-    </div>
-  </div>
-</div>
-
+// Function to extract parameter value from URL
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+</script>
